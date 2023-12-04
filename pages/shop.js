@@ -25,14 +25,11 @@ import Loading from '@/component/Loading';
 import { getDatafromServer } from '@/utils/util';
 
 function Data() {
-  const [gyroData, setGyroData] = useState(null);
-  const [accerData, setAccerData] = useState(null);
   const gyroDataRef = useRef(null);
   const accerDataRef = useRef(null);
   const latestPreviousAccerData = useRef([]);
   const [accumulatedData, setAccumulatedData] = useState([]);
-  const [previousAccerData, setPreviousAccerData] = useState([]);
-  const [previousGyroData, setPreviousGyroData] = useState([]);
+  const [previousData, setPriviousData] = useState([]);
 
   const [skt, setSkt] = useState(null);
   const [intervalId, setIntervalId] = useState();
@@ -54,7 +51,7 @@ function Data() {
     accerDataRef.current = { x, y, z };
     gyroDataRef.current = { alpha, beta, gamma };
     const currentTime = Date.now();
-    setPreviousAccerData((prev) => [
+    setPriviousData((prev) => [
       ...prev,
       {
         timestamp: currentTime,
@@ -79,8 +76,8 @@ function Data() {
 
   useEffect(() => {
     // latestPreviousAccerData를 현재 previousAccerData로 업데이트
-    latestPreviousAccerData.current = previousAccerData;
-  }, [previousAccerData]);
+    latestPreviousAccerData.current = previousData;
+  }, [previousData]);
 
   const onScale = () => {
     if (skt && skt.OPEN) {
@@ -90,7 +87,7 @@ function Data() {
       setSkt(null);
       setIsBorder(false);
     } else if (skt === null) {
-      const serverURL = 'wss://163.180.186.123:8000/ws/' + uname;
+      const serverURL = `${process.env.NEXT_PUBLIC_WEB_IP}:8000/ws/` + uname;
       const ws = new WebSocket(serverURL);
       setSkt(ws);
     }
@@ -214,7 +211,7 @@ function Data() {
             mt="24px"
             onClick={(e) => {
               const currentTime = Date.now();
-              const accerData = previousAccerData.filter(
+              const accerData = previousData.filter(
                 (item) => currentTime - item.timestamp <= 500,
               );
               const gyroData = previousGyroData.filter(
@@ -258,7 +255,6 @@ function Data() {
                           : false
                       }
                       isBorder={isBorder}
-                      // scale={i === curScaleBox[j] && j === curScaleBox[i] ? true : false}
                     />
                   </>
                 ))}

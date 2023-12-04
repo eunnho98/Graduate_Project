@@ -16,8 +16,7 @@ function Tmp() {
   const [data, setData] = useRecoilState(fetchingData);
 
   useEffect(() => {
-    //* Test URL: const res = fetch('http://127.0.0.1:8080/get_results')
-    const res = fetch('https://163.180.186.123:8080/get_results')
+    const res = fetch(`${process.env.NEXT_PUBLIC_SERVER_IP}:8080/get_results`)
       .then((res) => res.json())
       .then((data) => setData(data));
   }, []);

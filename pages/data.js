@@ -5,7 +5,6 @@ import { useRecoilValue } from 'recoil';
 import { firebase_db } from '../firebaseConfig';
 import { ref, set } from 'firebase/database';
 import { useRouter } from 'next/router';
-import Loading from '@/component/Loading';
 
 const getRandomPosition = () => {
   const x = Math.random() * 100;
@@ -48,8 +47,6 @@ function findDotBoxPosition(boxes) {
 function Data2() {
   const [count, setCount] = useState(0);
   const [dots, setDots] = useState([]);
-  const [gyroData, setGyroData] = useState(null);
-  const [accerData, setAccerData] = useState(null);
   const [accumulatedData, setAccumulatedData] = useState([]);
   const [boxes, setBoxes] = useState(BoxArr);
   const [buttonOrder, setButtonOrder] = useState([]);
